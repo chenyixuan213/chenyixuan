@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			a{
+				text-decoration:none;
+				} /*去掉a标签的下划线  */
+			#logo_index{
+				width: 570px;
+			}
+		</style>
+	</head>
+	<script src="js/jquery1.8.3.js"></script>
+	<body>
+		<div>	
+		    <img src="img/logo.png" id = "logo_index"/>
+		</div>
+		<div>
+			<h2>热门资讯</h2>
+			<span>
+			<!-- 用于填充数据 -->
+			</span>
+		</div>
+		<div>
+			<p style="color: red;">ps:首页只展示标题，时间和状态，点击标题查看内容</p>
+		</div>
+		
+	</body>
+	<script>
+		window.onload = function(){
+			var url = "data.json"; /*读取本地json文件*/
+			var request = new XMLHttpRequest();
+			request.open("GET",url); /* 设置请求方式和路径 */
+			request.send(null); /* 不发送数据到服务器 */
+			request.onload = function(){
+				if(request.status == 200){ /* 返回状态码200即请求成功*/
+					var msg = JSON.parse(request.responseText); /*格式化json数据  */
+					if(msg.code == "1"){ /* 返回状态码1，代表请求成功*/
+						for(var i=0;i<msg.result.length;i++){ /* 遍历json数据，获取到指定数据*/
+							$('span').append('<li id='+i+'>' +'<a href="content.html?id='+i+'">' + msg.result[i].title+ '</a>'+ msg.result[i].time 
+							+ "&nbsp" +msg.result[i].status_DISPLAY +'</li>');		
+						}	
+					}
+				}
+			}
+		}
+	</script>
+</html>

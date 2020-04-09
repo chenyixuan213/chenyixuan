@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			#logo_index{
+				width: 570px;
+			}
+		</style>
+	</head>
+	<script src="js/jquery1.8.3.js"></script>
+	<body>
+		<div>	
+		    <a href="index.html"><img src="img/logo.png" id = "logo_index"/></a>
+		</div>
+		<div>
+			<span>
+			<!-- 用于填充数据 -->
+			</span>
+		</div>
+		<div>
+			<p style="color: red;">ps:点击图片返回首页</p>
+		</div>
+	</body>
+	<script> 
+		/*拿到传过来的参数，方便精确定位到数据  */
+		function getID(param){
+			/* 获取当前的url */
+			var url = document.location.href;
+			/* 截取url */
+			var getstr = url.substr(url.indexOf('?')+1);
+			/* 解析成数组，方便遍历查找 */
+			var get = getstr.split('&');
+			/* 循环遍历，找到传过来的参数 */
+			for(var i in get){
+				if(get[i].indexOf(param + '=') >= 0){
+					return get[i].replace(param + '=' , '')
+				}
+			}
+			/* 找不到返回false */
+			return false
+		}
+		/* 将拿到的数据放在指定位置 */
+		window.onload = function(){
+			var id = getID('id');
+			var url = "data.json"; /*读取本地json文件*/
+			var request = new XMLHttpRequest();
+			request.open("GET",url); /* 设置请求方式和路径 */
+			request.send(null); /* 不发送数据到服务器 */
+			request.onload = function(){
+				if(request.status == 200){ /* 返回状态码200即请求成功*/
+					var msg = JSON.parse(request.responseText); /*格式化json数据  */
+					if(msg.code == "1"){ /* 返回状态码1，代表请求成功*/
+							$('span').append('<li id='+id+'>' +'<a href="content.html?id='+id+'">' + msg.result[id].title+ '</a>'+ "&nbsp;&nbsp"
+							+ msg.result[id].time 
+							+ "&nbsp;&nbsp" +msg.result[id].author +'</li>');	
+								$('span').append('<p>'+msg.result[id].content+'</p>')
+					}
+				}
+			}
+		}
+	</script>
+</html>
